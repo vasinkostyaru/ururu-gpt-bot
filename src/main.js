@@ -4,7 +4,7 @@ import { message } from 'telegraf/filters';
 import config from 'config';
 import { ogg } from './ogg.js';
 import { openai } from './openai.js'
-import { removeFile } from './utils.js';
+import { removeFile } from "./utils.js";
 import { initCommand, processTextToChat, INITIAL_SESSION } from './logic.js'
 
 const bot = new  Telegraf(config.get('TELEGRAM_TOKEN'));
@@ -16,6 +16,11 @@ bot.command('start', initCommand);
 
 bot.on(message('voice'), async (ctx) => {
   try {
+    if(ctx.message.from.id !== config.get('MY_ID')) {
+      await ctx.reply(code(`Ты не пройдешь!`))
+      return;
+    }
+
     ctx.session ??= INITIAL_SESSION
 
     await ctx.reply(code('Обработка сообщения.. пару сек..'));
@@ -36,6 +41,11 @@ bot.on(message('voice'), async (ctx) => {
 
 bot.on(message('text'), async (ctx) => {
   try {
+    if(ctx.message.from.id !== config.get('MY_ID')) {
+      await ctx.reply(code(`Ты не пройдешь!`))
+      return;
+    }
+
     ctx.session ??= INITIAL_SESSION
 
     await processTextToChat(ctx, ctx.message.text)

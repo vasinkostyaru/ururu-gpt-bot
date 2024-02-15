@@ -1,4 +1,4 @@
-import { unlink } from 'fs/promises'
+import { unlink } from 'fs/promises';
 
 export async function removeFile(path) {
   try {
@@ -7,3 +7,4 @@ export async function removeFile(path) {
     console.log('Error while removing file', e.message)
   }
 }
+
