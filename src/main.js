@@ -5,23 +5,24 @@ import config from 'config';
 import { ogg } from './ogg.js';
 import { openai } from './openai.js'
 import { removeFile } from "./utils.js";
-import { initCommand, processTextToChat, INITIAL_SESSION } from './logic.js'
+import { initCommand, initCommand4, processTextToChat, INITIAL_SESSION } from './logic.js'
 
 const bot = new  Telegraf(config.get('TELEGRAM_TOKEN'));
 
 bot.use(session());
 
-bot.command('new', initCommand);
 bot.command('start', initCommand);
+bot.command('new', initCommand);
+bot.command('new4', initCommand4);
 
 bot.on(message('voice'), async (ctx) => {
   try {
     if(ctx.message.from.id !== config.get('MY_ID')) {
-      await ctx.reply(code(`Ты не пройдешь!`))
+      await ctx.reply(code(`Ты не пройдешь!`));
       return;
     }
 
-    ctx.session ??= INITIAL_SESSION
+    ctx.session ??= INITIAL_SESSION;
 
     await ctx.reply(code('Обработка сообщения.. пару сек..'));
     const link = await ctx.telegram.getFileLink(ctx.message.voice.file_id);
@@ -32,7 +33,7 @@ bot.on(message('voice'), async (ctx) => {
 
     const text = await openai.transcription(mp3Path);
 
-    await ctx.reply(code(`Ты спросил: ${text}`))
+    await ctx.reply(code(`Ты спросил: ${text}`));
     await processTextToChat(ctx, text);
   } catch (e) {
     console.log('Error voice:', e.message);
@@ -42,13 +43,14 @@ bot.on(message('voice'), async (ctx) => {
 bot.on(message('text'), async (ctx) => {
   try {
     if(ctx.message.from.id !== config.get('MY_ID')) {
-      await ctx.reply(code(`Ты не пройдешь!`))
+      await ctx.reply(code(`Ты не пройдешь!`));
       return;
     }
 
-    ctx.session ??= INITIAL_SESSION
+    ctx.session ??= INITIAL_SESSION;
 
-    await processTextToChat(ctx, ctx.message.text)
+    await ctx.reply(code('Обработка сообщения.. пару сек..'));
+    await processTextToChat(ctx, ctx.message.text);
   } catch (e) {
     console.log('Error text:', e);
   }

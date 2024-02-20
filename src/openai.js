@@ -1,6 +1,7 @@
 import OpenAI from "openai";
-import config from 'config'
-import { createReadStream } from 'fs'
+import config from "config";
+import { createReadStream } from "fs";
+
 class OpenAIClass {
   roles = {
     ASSISTANT: 'assistant',
@@ -9,17 +10,16 @@ class OpenAIClass {
   }
 
   constructor(apiKey) {
-    const configuration = new OpenAI({
+    this.openai = new OpenAI({
       apiKey,
       baseURL: 'https://api.proxyapi.ru/openai/v1'
-    })
-    this.openai = configuration;
+    });
   }
 
-  async chat(messages) {
+  async chat({messages, version}) {
     try {
       const response = await this.openai.chat.completions.create({
-        model: 'gpt-3.5-turbo',
+        model: version,
         messages,
       })
 
