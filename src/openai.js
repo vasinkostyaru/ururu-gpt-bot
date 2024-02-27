@@ -18,11 +18,11 @@ class OpenAIClass {
 
   async chat({messages, version}) {
     try {
+      console.log("chat");
       const response = await this.openai.chat.completions.create({
         model: version,
         messages,
       })
-      console.log("chat");
       console.log(messages);
       console.log(response);
       return response.choices[0].message;
