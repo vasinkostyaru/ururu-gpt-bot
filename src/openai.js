@@ -22,7 +22,9 @@ class OpenAIClass {
         model: version,
         messages,
       })
-      console.log(chat);
+      console.log("chat");
+      console.log(messages);
+      console.log(response);
       return response.choices[0].message;
     } catch (e) {
       console.log('Error while gpt chat', e)

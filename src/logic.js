@@ -23,7 +23,7 @@ export async function initCommand4(ctx) {
 
 export async function processTextToChat(ctx, content) {
   try {
-    console.log(processTextToChat);
+    console.log("processTextToChat");
     // пушим сообщения пользователя в сессию (в контекст)
     ctx.session.messages.push({ role: openai.roles.USER, content })
     // пушим сообщения бота в сессию (в контекст)
