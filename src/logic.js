@@ -31,7 +31,7 @@ export async function processTextToChat(ctx, content) {
       role: openai.roles.ASSISTANT,
       content: response.content,
     })
-    await ctx.reply(response.content)
+    await ctx.reply(response.content, { parse_mode: 'Markdown' })
   } catch (e) {
     console.log('Error while proccesing text to gpt', e.message)
   }
