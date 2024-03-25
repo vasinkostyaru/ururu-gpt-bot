@@ -1,4 +1,7 @@
 import { openai } from './openai.js'
+import config from "config";
+import axios from 'axios';
+import { code } from "telegraf/format";
 
 export const INITIAL_SESSION = {
   messages: [],
@@ -36,3 +39,18 @@ export async function processTextToChat(ctx, content) {
     console.log('Error while proccesing text to gpt', e.message)
   }
 }
+
+export const getBalance = async (ctx) => {
+  await ctx.reply(code(`загрузка баланса..`));
+  try {
+    const response = await axios.get('https://api.proxyapi.ru/proxyapi/balance', {
+      headers: {
+        Authorization: `Bearer ${config.get('OPENAI_KEY')}`
+      }
+    });
+    console.log(response.data.balance);
+    await ctx.reply(code(`Баланс: ${response.data.balance.toFixed(2)} ₽`));
+  } catch (error) {
+    //console.error(error.message);
+  }
+};

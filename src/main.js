@@ -5,15 +5,15 @@ import config from 'config';
 import { ogg } from './ogg.js';
 import { openai } from './openai.js'
 import { removeFile } from "./utils.js";
-import { initCommand, initCommand4, processTextToChat, INITIAL_SESSION } from './logic.js'
+import { initCommand, initCommand4, processTextToChat, INITIAL_SESSION, getBalance } from "./logic.js";
 
 const bot = new  Telegraf(config.get('TELEGRAM_TOKEN'));
 
 bot.use(session());
 
 bot.command('start', initCommand);
-bot.command('new', initCommand);
 bot.command('new4', initCommand4);
+bot.command('balance', getBalance);
 
 bot.on(message('voice'), async (ctx) => {
   try {
