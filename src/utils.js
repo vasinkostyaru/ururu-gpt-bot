@@ -1,4 +1,5 @@
 import { unlink } from 'fs/promises';
+import config from "config";
 
 export async function removeFile(path) {
   try {
@@ -8,3 +9,6 @@ export async function removeFile(path) {
   }
 }
 
+export function isGoodId(id) {
+  return config.get('MY_IDS').includes(id);
+}

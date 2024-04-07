@@ -4,7 +4,7 @@ import { message } from 'telegraf/filters';
 import config from 'config';
 import { ogg } from './ogg.js';
 import { openai } from './openai.js'
-import { removeFile } from "./utils.js";
+import { isGoodId, removeFile } from "./utils.js";
 import { initCommand, initCommand4, processTextToChat, INITIAL_SESSION, getBalance } from "./logic.js";
 
 const bot = new  Telegraf(config.get('TELEGRAM_TOKEN'));
@@ -17,7 +17,7 @@ bot.command('balance', getBalance);
 
 bot.on(message('voice'), async (ctx) => {
   try {
-    if(ctx.message.from.id !== config.get('MY_ID')) {
+    if(!isGoodId(ctx.message.from.id)) {
       await ctx.reply(code(`Ты не пройдешь!`));
       return;
     }
@@ -42,7 +42,7 @@ bot.on(message('voice'), async (ctx) => {
 
 bot.on(message('text'), async (ctx) => {
   try {
-    if(ctx.message.from.id !== config.get('MY_ID')) {
+    if(!isGoodId(ctx.message.from.id)) {
       await ctx.reply(code(`Ты не пройдешь!`));
       return;
     }
@@ -52,6 +52,8 @@ bot.on(message('text'), async (ctx) => {
     await ctx.reply(code('Обработка сообщения.. пару сек..'));
     await processTextToChat(ctx, ctx.message.text);
   } catch (e) {
+    await ctx.reply(code(`Произошла ошибка`));
+    await ctx.reply(code(e));
     console.log('Error text:', e);
   }
 })
